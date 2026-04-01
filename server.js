@@ -11,6 +11,7 @@ import adminRouter from './routes/adminRoute.js'
 import siteConfigRouter from './routes/siteConfigRoute.js'
 import wishlistRouter from './routes/wishlistRoute.js'
 import couponRouter from './routes/couponRoute.js'
+import { swaggerDocs } from './config/swagger.js'
 
 // App Config
 const app = express()
@@ -32,8 +33,26 @@ app.use('/api/siteConfig', siteConfigRouter)
 app.use('/api/wishlist', wishlistRouter)
 app.use('/api/coupon', couponRouter)
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Health Check Endpoint
+ *     description: Returns a simple message to confirm the API is running smoothly.
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: API Working
+ */
 app.get('/', (req, res) => {
    res.send("API Working")
 })
+
+// Initialize Swagger Docs
+swaggerDocs(app);
 
 app.listen(port, () => console.log('Server started on PORT : ' + port))
