@@ -11,6 +11,10 @@ const options = {
     },
     servers: [
       {
+        url: 'https://rohanshi-backend.vercel.app',
+        description: 'Production server',
+      },
+      {
         url: 'http://localhost:4000',
         description: 'Development server',
       },
@@ -23,7 +27,17 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 export const swaggerDocs = (app) => {
+  // Use CDN for CSS and JS to ensure they load when deployed serverless (e.g., on Vercel)
+  const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
+  
   // Expose docs at /docs
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  console.log(`Swagger docs available at http://localhost:4000/docs`);
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customCssUrl: CSS_URL,
+    customSiteTitle: "E-Commerce API Docs",
+    customJs: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-bundle.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-standalone-preset.js"
+    ]
+  }));
+  console.log(`Swagger docs available at /docs`);
 };
