@@ -29,7 +29,7 @@ const swaggerSpec = swaggerJsdoc(options);
 export const swaggerDocs = (app) => {
   // Use CDN for CSS and JS to ensure they load when deployed serverless (e.g., on Vercel)
   const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
-  
+
   // Expose docs at /docs
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customCssUrl: CSS_URL,

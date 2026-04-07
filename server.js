@@ -55,4 +55,10 @@ app.get('/', (req, res) => {
 // Initialize Swagger Docs
 swaggerDocs(app);
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Global error handler caught:", err);
+    res.status(500).json({ success: false, message: err.message || "Internal Server Error" });
+});
+
 app.listen(port, () => console.log('Server started on PORT : ' + port))

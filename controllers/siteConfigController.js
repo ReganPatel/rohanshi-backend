@@ -19,7 +19,7 @@ const getSiteConfig = async (req, res) => {
 
 const updateSiteConfig = async (req, res) => {
     try {
-        const { latestProducts, bestsellerProducts, existingHeroImages, facebookLink, instagramLink, contactEmail, contactPhone } = req.body
+        const { latestProducts, bestsellerProducts, existingHeroImages, heroImagesOrder, facebookLink, instagramLink, contactEmail, contactPhone } = req.body
         const newHeroImagesFiles = req.files || []
 
         let config = await siteConfigModel.findOne()
@@ -49,7 +49,21 @@ const updateSiteConfig = async (req, res) => {
             }
         }
 
-        const finalHeroImages = [...retainedImages, ...uploadedImagesUrls]
+        let finalHeroImages = []
+        if (heroImagesOrder) {
+            let parsedOrder = typeof heroImagesOrder === 'string' ? JSON.parse(heroImagesOrder) : heroImagesOrder
+            finalHeroImages = parsedOrder.map(item => {
+                if (item.type === 'existing') {
+                    return retainedImages[item.index]
+                } else if (item.type === 'new') {
+                    return uploadedImagesUrls[item.index]
+                }
+                return null
+            }).filter(url => url !== null)
+        } else {
+            // Fallback backward compatibility
+            finalHeroImages = [...retainedImages, ...uploadedImagesUrls]
+        }
 
         // Parse product arrays
         const parsedLatestProducts = JSON.parse(latestProducts || "[]")
