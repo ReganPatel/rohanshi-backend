@@ -1,0 +1,1 @@
+Initial lookup: Found 25 users and 77 products.
