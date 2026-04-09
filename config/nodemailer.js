@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 export const sendOTPVerificationEmail = async ({ email, otp }) => {
   try {
     const mailOptions = {
-      from: `"Rohanshi's Creation" <${process.env.SENDER_EMAIL}>`,
+      from: `"Rohanshi's Creation" <${process.env.SENDER_EMAIL || process.env.GMAIL_SMTP_USER}>`,
       to: email,
       subject: "Verify Your Email - One Time Password",
       html: `
@@ -37,14 +37,14 @@ export const sendOTPVerificationEmail = async ({ email, otp }) => {
 
   } catch (error) {
     console.error("Error sending OTP email: ", error);
-    throw new Error("Failed to send verification email.");
+    throw new Error(`Email failed: ${error.message}`);
   }
 };
 
 export const sendPasswordResetEmail = async ({ email, otp }) => {
   try {
     const mailOptions = {
-      from: `"Rohanshi's Creation" <${process.env.SENDER_EMAIL}>`,
+      from: `"Rohanshi's Creation" <${process.env.SENDER_EMAIL || process.env.GMAIL_SMTP_USER}>`,
       to: email,
       subject: "Password Reset Request - One Time Password",
       html: `
@@ -68,6 +68,6 @@ export const sendPasswordResetEmail = async ({ email, otp }) => {
 
   } catch (error) {
     console.error("Error sending Password Reset email: ", error);
-    throw new Error("Failed to send password reset email.");
+    throw new Error(`Email failed: ${error.message}`);
   }
 };
